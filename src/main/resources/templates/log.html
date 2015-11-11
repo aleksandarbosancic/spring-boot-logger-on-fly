@@ -53,6 +53,7 @@
                     url : 'logger/logfile?page=' + page + '&size=' + $('.sel').val(),
                     success : function(data) {
                         $('pre code').html(data);
+                        if(data == "") page--;
                         $('pre code').each(function(i, block) {
                             hljs.highlightBlock(block);
                         });
