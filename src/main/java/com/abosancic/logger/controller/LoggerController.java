@@ -67,4 +67,10 @@ public class LoggerController {
 		loggerService.print();
     }
 	
+	@RequestMapping( value = "/logfile", method = RequestMethod.GET)
+    public String getlogfile(@RequestParam Long page, @RequestParam Long size) {
+		log.info("Get file part: page: {}, size: {}", page, size);
+        return loggerService.getLogFile(page, size);
+    }
+	
 }

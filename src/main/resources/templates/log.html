@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <!-- Required meta tags always come first -->
+        <title>Logger</title>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        
+        <link href="../static/highlight/styles/default.css" th:href="@{/highlight/styles/default.css}" rel="stylesheet" />
+        <script src="/highlight/highlight.pack.js"></script>
+        <script th:inline="javascript">hljs.initHighlightingOnLoad();</script>
+        
+        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        
+        <link href="../static/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    </head>
+    <body>
+        
+        <div class="container">
+            <h1>Logs</h1>
+            
+            <!-- Content here -->    
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="exampleInputName2">Size</label>
+                    <select class="form-control sel">
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-default btn-sm btn-back"> &laquo; Back</button>
+                <button type="button" class="btn btn-default btn-sm btn-next">Next &raquo;</button>
+            </form>
+            
+            <div>
+                <pre>
+                    <code class="html"/>
+                </pre>
+            </div>
+            
+        </div>
+        
+        <script th:inline="javascript">
+        /*<![CDATA[*/
+            var username = 'John Apricot';
+            var page = 1;
+            function crunchifyAjax() {
+                $.ajax({
+                    url : 'logger/logfile?page=' + page + '&size=' + $('.sel').val(),
+                    success : function(data) {
+                        $('pre code').html(data);
+                        $('pre code').each(function(i, block) {
+                            hljs.highlightBlock(block);
+                        });
+                    }
+                });
+            };
+            
+            
+            $(".btn-back").click(function(){
+                page--;
+                if(page < 1) page = 1;
+                crunchifyAjax();
+            }); 
+            
+            $(".btn-next").click(function(){
+                page++;
+                crunchifyAjax();
+            }); 
+            
+            $('.sel').on('change', function() {
+                crunchifyAjax();
+            });
+            
+            crunchifyAjax();
+//            $('#mydropdownmenu > li').click(function(e){
+//                e.preventDefault();
+//                var selected = $(this).text();
+//                //$('#mydropwodninput').val(selected);
+//                //$('#mydropdowndisplay').text(selected);
+//            });
+
+        /*]]>*/
+        </script>
+        
+    </body>
+</html>

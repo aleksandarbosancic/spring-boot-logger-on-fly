@@ -8,10 +8,16 @@ package com.abosancic.logger.service;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import com.abosancic.logger.models.LoggerDTO;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,6 +102,24 @@ public class LoggerService {
 				loggers.add(ldto);
 			});
 		return loggers;
+	}
+
+	public String getLogFile(Long page, Long size) {
+		Path path = Paths.get("C:\\work\\Repository\\github\\spring-boot-logger-on-fly\\logs", "rest-demo.log");
+		StringBuilder builder = new StringBuilder();
+		//The stream hence file will also be closed here
+		try (Stream<String> lines = Files.lines(path, StandardCharsets.UTF_8)) {
+			lines
+				.skip(((page-1) * size))
+				.limit(size)
+				.peek(line -> {
+					builder.append(line).append("\n");
+				})
+				.forEachOrdered(System.out::println);
+		} catch (IOException ex) {
+			java.util.logging.Logger.getLogger(LoggerService.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+		}
+		return builder.toString();
 	}
 	
 }

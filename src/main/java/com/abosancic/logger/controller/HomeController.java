@@ -33,4 +33,11 @@ public class HomeController {
         return "home";
     }
 	
+	@RequestMapping( value = "/log", method = RequestMethod.GET)
+    public String log(Model model) {
+		log.info("Prepare home page....");
+		model.addAttribute("loggers", loggerService.getAllLoggers());
+        return "log";
+    }
+	
 }
