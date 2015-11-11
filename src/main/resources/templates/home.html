@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <!-- Required meta tags always come first -->
+        <title>Logger</title>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        
+        <link href="../static/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    </head>
+    <body>
+        
+        <div class="container">
+            <h1>Loggers list</h1>
+            <!-- Content here -->
+            <table class="table">
+                <thead class="thead-default">
+                    <tr>
+                        <th>Logger</th>
+                        <th>Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="logger : ${loggers}">
+                        <td th:text="${logger.logger}">Onions</td>
+                        <td th:text="${logger.level}">Onions</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

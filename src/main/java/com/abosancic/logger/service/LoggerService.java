@@ -7,6 +7,9 @@ package com.abosancic.logger.service;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
+import com.abosancic.logger.models.LoggerDTO;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.annotation.PostConstruct;
@@ -33,8 +36,6 @@ public class LoggerService {
 	private static final Logger log = LoggerFactory.getLogger(LoggerService.class);
 
 	private Map<String, Level> originalLevels = new TreeMap<>();
-	
-	private boolean isChanged = false;
 	
 	@PostConstruct
 	private void init(){
@@ -81,6 +82,20 @@ public class LoggerService {
 				levels.put(logger.getName(), logger.getLevel());
 			});
 		return levels;
+	}
+	
+	public List<LoggerDTO> getAllLoggers() {
+		List loggers = new ArrayList();
+		LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+		context.getLoggerList().stream()
+			.filter((logger) -> (logger.getLevel() != null))
+			.forEach((logger) -> {
+				LoggerDTO ldto = new LoggerDTO();
+				ldto.setLevel(logger.getLevel().toString());
+				ldto.setLogger(logger.getName());
+				loggers.add(ldto);
+			});
+		return loggers;
 	}
 	
 }

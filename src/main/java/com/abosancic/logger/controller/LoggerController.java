@@ -7,13 +7,17 @@ package com.abosancic.logger.controller;
 
 import com.abosancic.logger.service.LoggerService;
 import ch.qos.logback.classic.Level;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web .bind.annotation.RequestMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author abosancic
  */
 @RestController
+@RequestMapping("/logger")
 public class LoggerController {
 	
 	private static final Logger log = LoggerFactory.getLogger(LoggerController.class);
@@ -33,41 +38,33 @@ public class LoggerController {
 		loggerService.print();
 	}
 	
-	@RequestMapping("/logger")
-    public String logger() {
-		log.error("Message logged at ERROR level");
-	    log.warn("Message logged at WARN level");
-		log.info("Message logged at INFO level");
-	    log.debug("Message logged at DEBUG level");
-        return "Greetings from Spring Boot!";
+	@RequestMapping(method = RequestMethod.GET)
+    public @ResponseBody List logger() {
+		return loggerService.getAllLoggers();
     }
 	
-	@RequestMapping(value = "/logger", method = RequestMethod.PUT)
-    public String setLogger(@RequestParam String level) {
+	@RequestMapping(method = RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+    public void setLogger(@RequestParam String level) {
 		loggerService.changeLevel(Level.toLevel(level));
-		log.error("Message logged at ERROR level");
-	    log.warn("Message logged at WARN level");
-		log.info("Message logged at INFO level");
-	    log.debug("Message logged at DEBUG level");
-		log.trace("Message logged at TRACE level");
-		return "Greetings from Spring Boot!";
     }
 	
-	@RequestMapping(value = "/logger", method = RequestMethod.DELETE)
-    public String resetLogger() {
+	@RequestMapping(method = RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.OK)
+    public void resetLogger() {
 		loggerService.changeToInit();
-		log.error("Message logged at ERROR level");
-	    log.warn("Message logged at WARN level");
-		log.info("Message logged at INFO level");
-	    log.debug("Message logged at DEBUG level");
-		log.trace("Message logged at TRACE level");
-		return "Greetings from Spring Boot!";
     }
 	
-	@RequestMapping("/loggerp")
-    public String loggerp() {
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+    public void test() {
 		loggerService.print();
-		return "Greetings from Spring Boot!";
+		log.error("Message logged at ERROR level");
+		log.warn("Message logged at WARN level");
+		log.info("Message logged at INFO level");
+		log.debug("Message logged at DEBUG level");
+		log.trace("Message logged at TRACE level");
+		loggerService.print();
     }
 	
 }
